@@ -1,34 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Card from "./components/Card";
+import Header from "./components/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [pokemones, setPokemones] = useState([]);
+  const [search, setSearch] = useState("");
+  useEffect(() => {
+    const getPokemons = async () => {
+      const response = await axios.get(
+        "https://pokeapi.co/api/v2/pokemon?limit=898&offset=0"
+      );
+      // console.log(response.data);
+      setPokemones(response.data.results);
+    };
+    getPokemons();
+  }, []);
+  // useEffect(() => {
+  //   // console.log(search)
+  //   const newPokemones = pokemones.filter(pokemon => pokemon.name === search.toLowerCase())
+  //   setPokemones(newPokemones)
+  //   // console.log(newPokemones)
+  // }, [search])
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <Header />
+      <main className="contenedor px-3">
+        <div className="d-flex justify-content-center">
+          <div className="col-md-4">
+            <input
+              className="form-control fs-4"
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Ejemplo: Pikachu"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="d-flex justify-content-between mt-3">
+          <div className="row">
+            {pokemones.map((pokemon) => (
+              <Card
+                key={pokemon.name}
+                namePokemon={pokemon.name}
+              />
+            ))}
+          </div>
+          {/* {disable && (
+            <div className="row">
+              {pokemones.map((pokemon) => (
+                <Card
+                  key={pokemon.name}
+                  namePokemon={pokemon.name}
+                  setDisable={setDisable}
+                />
+              ))}
+            </div>
+          )} */}
+        </div>
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

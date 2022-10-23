@@ -55,8 +55,8 @@ const Header = ({ setGeneration }) => {
     <header className="d-flex justify-content-center">
       <div className="row">
         <div className="col-md-12">
-          <h1 className="nombre-sitio">
-            Poke <span> Api </span>
+          <h1 className="text-center">
+            Poke <strong> Api </strong>
           </h1>
         </div>
         <div className="col-md-12 my-3">

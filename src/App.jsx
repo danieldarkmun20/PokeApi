@@ -2,14 +2,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "./components/Card";
 import Header from "./components/Header";
+import PokemonDetails from "./components/PokemonDetails";
+import SearchInput from "./components/SearchInput";
 
 function App() {
   const [pokemones, setPokemones] = useState([]);
   const [pokemonesFilter, setPokemonesFilter] = useState([]);
+  const [pokemonSelected, setPokemonSelected] = useState({});
   const [search, setSearch] = useState("");
   const [count, setCount] = useState(0);
   const [generation, setGeneration] = useState({
-    limit: 898,
+    limit: 150,
     offset: 0,
   });
   useEffect(() => {
@@ -22,6 +25,7 @@ function App() {
     };
     getPokemons();
   }, []);
+
   useEffect(() => {
     const getPokemons = async () => {
       const response = await axios.get(
@@ -32,6 +36,7 @@ function App() {
     };
     getPokemons();
   }, [generation]);
+
   useEffect(() => {
     if (search.trim() === "") {
       setPokemonesFilter(pokemones);
@@ -42,22 +47,13 @@ function App() {
     );
     setPokemonesFilter(newPokemones);
   }, [search]);
+
   return (
     <div>
       <Header setGeneration={setGeneration} />
       <main className="contenedor px-3">
         <div className="d-flex justify-content-center">
-          <div className="col-md-4">
-            <input
-              className="form-control fs-4"
-              type="text"
-              name="search"
-              id="search"
-              placeholder="Ejemplo: Pikachu"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+          <SearchInput search={search} setSearch={setSearch} />
         </div>
         <div className="d-flex justify-content-between mt-3">
           <div
@@ -70,13 +66,14 @@ function App() {
               <Card
                 key={pokemon.name}
                 namePokemon={pokemon.name}
-                count={count}
+                setPokemonSelected={setPokemonSelected}
                 setCount={setCount}
               />
             ))}
           </div>
         </div>
       </main>
+      <PokemonDetails pokemon={pokemonSelected}/>
     </div>
   );
 }

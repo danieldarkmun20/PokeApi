@@ -69,7 +69,7 @@ const PokemonDetails = ({ pokemon }) => {
                 ))}
               </div>
               <div className="d-flex justify-content-evenly gap-3 px-4 py-2">
-                {pokemon.types.map((type) => (
+                { pokemon?.types !== undefined && pokemon?.types.map((type) => (
                   <span className=" rounded-pill badge bg-light text-dark">
                     {type.type.name}
                   </span>
